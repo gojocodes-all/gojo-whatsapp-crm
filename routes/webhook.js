@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message");
+const Conversation = require("../models/Conversation");
+const {
+  sendText,
+  sendMainMenu,
+} = require("../controllers/botController");
 
 const VERIFY_TOKEN = "gojo_whatsapp_secret_2026";
 
@@ -39,6 +44,27 @@ router.post("/", async (req, res) => {
       });
 
       console.log("Message saved!");
+const phone = msg.from;
+const text = msg.text?.body?.trim();
+
+let convo = await Conversation.findOne({
+  phone,
+});
+
+if (!convo) {
+  convo = await Conversation.create({
+    phone,
+  });
+}
+
+if (
+  text &&
+  ["hi", "hello", "hey", "menu", "start"].includes(
+    text.toLowerCase()
+  )
+) {
+  await sendMainMenu(phone);
+}
     }
 
     res.sendStatus(200);

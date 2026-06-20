@@ -55,7 +55,9 @@ background: "#111b21"
         setSelected={setSelected}
       />
 
-      <ChatWindow messages={currentMessages} />
+      <ChatWindow messages={currentMessages}
+                  selected={selected}
+ />
     </div>
   );
 }
