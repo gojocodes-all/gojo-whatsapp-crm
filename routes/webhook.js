@@ -25,7 +25,9 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const body = req.body;
-
+    console.log(
+  JSON.stringify(body, null, 2)
+);
     if (
       body.object === "whatsapp_business_account" &&
       body.entry?.[0]?.changes?.[0]?.value?.messages
