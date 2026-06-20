@@ -74,7 +74,73 @@ async function sendMainMenu(to) {
   );
 }
 
+async function sendServicesMenu(to) {
+  return axios.post(
+    `https://graph.facebook.com/v23.0/${process.env.PHONE_NUMBER_ID}/messages`,
+    {
+      messaging_product: "whatsapp",
+      to,
+      type: "interactive",
+      interactive: {
+        type: "list",
+        body: {
+          text: "🌐 Our Services\n\nSelect the service you need.",
+        },
+        action: {
+          button: "View Services",
+          sections: [
+            {
+              title: "Services",
+              rows: [
+                {
+                  id: "business",
+                  title: "🌍 Business Websites",
+                },
+                {
+                  id: "ecommerce",
+                  title: "🛒 E-Commerce Stores",
+                },
+                {
+                  id: "school",
+                  title: "🏫 School Websites",
+                },
+                {
+                  id: "landing",
+                  title: "🎨 Landing Pages",
+                },
+                {
+                  id: "webapp",
+                  title: "⚡ Web Applications",
+                },
+                {
+                  id: "maintenance",
+                  title: "🔧 Website Maintenance",
+                },
+                {
+                  id: "custom",
+                  title: "🧩 Custom Website",
+                },
+                {
+                  id: "main",
+                  title: "🔙 Back",
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+}
+
 module.exports = {
   sendText,
   sendMainMenu,
+  sendServicesMenu,
 };

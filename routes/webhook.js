@@ -5,6 +5,7 @@ const Conversation = require("../models/Conversation");
 const {
   sendText,
   sendMainMenu,
+  sendServicesMenu,
 } = require("../controllers/botController");
 
 const VERIFY_TOKEN = "gojo_whatsapp_secret_2026";
@@ -48,6 +49,8 @@ router.post("/", async (req, res) => {
       console.log("Message saved!");
 const phone = msg.from;
 const text = msg.text?.body?.trim();
+const actionId =
+  msg.interactive?.list_reply?.id;
 
 let convo = await Conversation.findOne({
   phone,
@@ -66,6 +69,9 @@ if (
   )
 ) {
   await sendMainMenu(phone);
+}
+if (actionId === "services") {
+  await sendServicesMenu(phone);
 }
     }
 
