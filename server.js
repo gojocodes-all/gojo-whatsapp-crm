@@ -15,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/webhook", webhookRoutes);
 app.use("/messages", messageRoutes);
+app.use("/send", require("./routes/send"));
 
 app.get("/", (req, res) => {
   res.send("GOJO WhatsApp CRM running 🚀");
