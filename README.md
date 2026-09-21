@@ -17,7 +17,7 @@ This repository is a prototype, not a production-ready CRM. The API currently ha
 
 ## Requirements
 
-- Node.js `20.19.0` or newer (Vite 8 also supports Node.js `22.12.0` and newer)
+- Node.js `^20.19.0` or `>=22.12.0` (the versions required by the installed Vite 8 release)
 - npm
 - MongoDB
 - A Meta app with WhatsApp Cloud API access, a phone number ID, and an access token
@@ -117,4 +117,3 @@ There is no automated test suite in the repository yet.
 ## Contributing
 
 Keep changes focused and avoid committing `.env`, access tokens, customer messages, or phone numbers. For frontend changes, run `npm run lint` and `npm run build` inside `frontend/`. For backend changes, start the API against a non-production database and verify the affected route manually. Describe any environment or webhook changes in the pull request.
-
