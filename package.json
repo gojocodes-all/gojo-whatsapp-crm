@@ -1,12 +1,15 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "WhatsApp Business CRM prototype backend",
+  "main": "server.js",
   "scripts": {
-  "dev": "nodemon server.js",
-  "start": "node server.js"
-},
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "check": "node --check app.js && node --check server.js && node --check config/db.js && node --check controllers/botController.js && node --check models/Conversation.js && node --check models/Message.js && node --check routes/messages.js && node --check routes/send.js && node --check routes/webhook.js && node --check test/app.test.js",
+    "test": "node --test",
+    "validate": "npm run check && npm test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
