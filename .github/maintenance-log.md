@@ -1,5 +1,36 @@
 # Maintenance log
 
+## 2026-09-26 — Testable API runtime and CI
+
+### Rationale
+
+`server.js` constructed the Express application, connected to MongoDB, and opened the network listener as soon as it was imported. That coupling prevented deterministic HTTP validation without a database connection and left backend changes without an automated regression gate.
+
+### Files changed
+
+- `app.js` — added a side-effect-free Express application factory containing middleware, routes, and the status endpoint.
+- `server.js` — reduced the process entry point to environment loading, database readiness, and listener startup; exported `startServer` for controlled reuse.
+- `test/app.test.js` — added dependency-free HTTP smoke tests for service health, invalid webhook verification, and unknown routes.
+- `package.json` — corrected the package entry point and added `check`, `test`, and `validate` scripts.
+- `.github/workflows/ci.yml` — added read-only backend validation plus frontend lint and production-build checks.
+- `README.md` — documented the new module boundary, commands, automated checks, and remaining integration-test requirements.
+
+### Validation
+
+- `npm ci`
+- `npm run validate`
+- `npm ci && npm run lint && npm run build` in `frontend/`
+- `git diff --check`
+- Complete diff review for route parity, startup order, security, frontend compatibility, and repository conventions.
+
+### Risk
+
+Low. Route paths, middleware order, response content, database-before-listen behavior, port selection, dependencies, and external API behavior are unchanged. The new tests use an ephemeral local port and do not access MongoDB, Meta, credentials, or customer data.
+
+### Rollback
+
+Revert this pull request to restore the single-file server entry point and remove the tests and CI workflow.
+
 ## 2026-09-21 — Repository documentation foundation
 
 ### Rationale

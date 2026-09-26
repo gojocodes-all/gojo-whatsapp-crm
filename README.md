@@ -5,6 +5,7 @@ A small WhatsApp Business CRM prototype for receiving webhook messages, storing 
 ## What is implemented
 
 - An Express API that connects to MongoDB before accepting requests
+- A testable application module that can be validated without a database connection
 - Meta WhatsApp webhook verification and inbound message handling
 - Storage for messages and per-phone conversation state
 - Text-message sending through the WhatsApp Cloud API
@@ -95,7 +96,9 @@ controllers/         WhatsApp Cloud API helpers and bot menus
 models/              Mongoose message and conversation models
 routes/              Webhook, message-list, and send endpoints
 frontend/            React and Vite dashboard
-server.js            Express application entry point
+app.js               Express middleware, routes, and status endpoint
+server.js            Database connection and process startup
+test/                 Dependency-free backend HTTP smoke tests
 ```
 
 ## Available commands
@@ -104,6 +107,9 @@ From the repository root:
 
 - `npm run dev` — start the API with nodemon
 - `npm start` — start the API with Node.js
+- `npm run check` — syntax-check backend source and tests
+- `npm test` — run backend HTTP smoke tests without MongoDB or Meta credentials
+- `npm run validate` — run all backend checks and tests
 
 From `frontend/`:
 
@@ -112,8 +118,8 @@ From `frontend/`:
 - `npm run lint` — lint frontend JavaScript and JSX
 - `npm run preview` — preview the production build locally
 
-There is no automated test suite in the repository yet.
+Pull requests and changes to `main` run the backend validation plus the frontend lint and production build in GitHub Actions.
 
 ## Contributing
 
-Keep changes focused and avoid committing `.env`, access tokens, customer messages, or phone numbers. For frontend changes, run `npm run lint` and `npm run build` inside `frontend/`. For backend changes, start the API against a non-production database and verify the affected route manually. Describe any environment or webhook changes in the pull request.
+Keep changes focused and avoid committing `.env`, access tokens, customer messages, or phone numbers. Run `npm run validate` for backend changes. For frontend changes, run `npm run lint` and `npm run build` inside `frontend/`. Changes that depend on MongoDB, Meta credentials, or live webhook delivery still require manual verification against non-production services. Describe any environment or webhook changes in the pull request.
