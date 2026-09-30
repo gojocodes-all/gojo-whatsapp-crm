@@ -1,5 +1,33 @@
 # Maintenance log
 
+## 2026-09-30 — Outgoing message input validation
+
+### Rationale
+
+`POST /send` destructured `req.body` before entering its error boundary and forwarded missing or blank values to the WhatsApp Cloud API. Requests without a JSON body could therefore become server errors, while incomplete JSON triggered unnecessary upstream calls instead of receiving a clear client error.
+
+### Files changed
+
+- `routes/send.js` — safely handles an absent body and requires `to` and `message` to be non-empty strings before calling Meta.
+- `test/app.test.js` — added HTTP regression coverage for missing bodies and blank values.
+- `.github/maintenance-log.md` — recorded this maintenance work.
+
+### Validation
+
+- `npm ci`
+- `npm run validate`
+- `npm ci && npm run lint && npm run build` in `frontend/`
+- `git diff --check`
+- Complete diff review for valid-request compatibility, error handling, security, and repository conventions.
+
+### Risk
+
+Low. Valid requests keep the same payload and upstream behavior. Only malformed requests change, receiving HTTP 400 before any Meta API call. No dependency, configuration, database, or frontend behavior changes.
+
+### Rollback
+
+Revert this pull request to restore the previous send-route behavior and remove its focused regression tests.
+
 ## 2026-09-26 — Testable API runtime and CI
 
 ### Rationale
