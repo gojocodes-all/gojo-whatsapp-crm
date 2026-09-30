@@ -4,7 +4,18 @@ const axios = require("axios");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { to, message } = req.body;
+  const { to, message } = req.body || {};
+
+  if (
+    typeof to !== "string" ||
+    !to.trim() ||
+    typeof message !== "string" ||
+    !message.trim()
+  ) {
+    return res.status(400).json({
+      error: '"to" and "message" must be non-empty strings.',
+    });
+  }
 
   try {
     const response = await axios.post(

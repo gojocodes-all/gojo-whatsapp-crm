@@ -49,6 +49,34 @@ test("webhook verification rejects an invalid token", async () => {
   });
 });
 
+test("send rejects a request without a JSON body", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/send`, {
+      method: "POST",
+    });
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), {
+      error: '"to" and "message" must be non-empty strings.',
+    });
+  });
+});
+
+test("send rejects blank recipient and message values", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/send`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ to: "   ", message: "" }),
+    });
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), {
+      error: '"to" and "message" must be non-empty strings.',
+    });
+  });
+});
+
 test("unknown routes return Express's 404 response", async () => {
   await withServer(async (baseUrl) => {
     const response = await fetch(`${baseUrl}/not-a-route`);
