@@ -74,7 +74,7 @@ https://your-api-host.example/webhook
 
 The verification value configured in Meta must match the `VERIFY_TOKEN` used by `routes/webhook.js`. That value is currently defined in source; move it to an environment variable before using the application beyond development.
 
-The webhook handler currently processes the first message in the first change entry. Text greetings (`hi`, `hello`, `hey`, `menu`, or `start`) open the main menu, and the `services` list action opens the services menu.
+The webhook handler processes every valid message across all entries and changes in delivery order. Text greetings (`hi`, `hello`, `hey`, `menu`, or `start`) open the main menu, and the `services` list action opens the services menu.
 
 ## API routes
 
@@ -95,10 +95,11 @@ config/              MongoDB connection
 controllers/         WhatsApp Cloud API helpers and bot menus
 models/              Mongoose message and conversation models
 routes/              Webhook, message-list, and send endpoints
+services/            Testable webhook batch processing
 frontend/            React and Vite dashboard
 app.js               Express middleware, routes, and status endpoint
 server.js            Database connection and process startup
-test/                 Dependency-free backend HTTP smoke tests
+test/                 Backend HTTP and webhook processor tests
 ```
 
 ## Available commands
@@ -108,7 +109,7 @@ From the repository root:
 - `npm run dev` — start the API with nodemon
 - `npm start` — start the API with Node.js
 - `npm run check` — syntax-check backend source and tests
-- `npm test` — run backend HTTP smoke tests without MongoDB or Meta credentials
+- `npm test` — run backend tests without MongoDB or Meta credentials
 - `npm run validate` — run all backend checks and tests
 
 From `frontend/`:
