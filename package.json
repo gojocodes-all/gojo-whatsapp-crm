@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "check": "node --check app.js && node --check server.js && node --check config/db.js && node --check controllers/botController.js && node --check models/Conversation.js && node --check models/Message.js && node --check routes/messages.js && node --check routes/send.js && node --check routes/webhook.js && node --check test/app.test.js",
+    "check": "node --check app.js && node --check server.js && node --check config/db.js && node --check controllers/botController.js && node --check models/Conversation.js && node --check models/Message.js && node --check routes/messages.js && node --check routes/send.js && node --check routes/webhook.js && node --check services/webhookProcessor.js && node --check test/app.test.js && node --check test/webhookProcessor.test.js",
     "test": "node --test",
     "validate": "npm run check && npm test"
   },

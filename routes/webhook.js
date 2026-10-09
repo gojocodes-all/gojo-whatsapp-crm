@@ -3,10 +3,10 @@ const router = express.Router();
 const Message = require("../models/Message");
 const Conversation = require("../models/Conversation");
 const {
-  sendText,
   sendMainMenu,
   sendServicesMenu,
 } = require("../controllers/botController");
+const { processWebhookBody } = require("../services/webhookProcessor");
 
 const VERIFY_TOKEN = "gojo_whatsapp_secret_2026";
 
@@ -26,53 +26,19 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const body = req.body;
-    console.log(
-  JSON.stringify(body, null, 2)
-);
-    if (
-      body.object === "whatsapp_business_account" &&
-      body.entry?.[0]?.changes?.[0]?.value?.messages
-    ) {
-      const msg =
-        body.entry[0].changes[0].value.messages[0];
+    console.log(JSON.stringify(body, null, 2));
 
-      const contact =
-        body.entry[0].changes[0].value.contacts?.[0];
+    const messageCount = await processWebhookBody(body, {
+      Message,
+      Conversation,
+      sendMainMenu,
+      sendServicesMenu,
+    });
 
-      await Message.create({
-        from: msg.from,
-        name: contact?.profile?.name || "Unknown",
-        message: msg.text?.body || "",
-        type: msg.type,
-      });
-
-      console.log("Message saved!");
-const phone = msg.from;
-const text = msg.text?.body?.trim();
-const actionId =
-  msg.interactive?.list_reply?.id;
-
-let convo = await Conversation.findOne({
-  phone,
-});
-
-if (!convo) {
-  convo = await Conversation.create({
-    phone,
-  });
-}
-
-if (
-  text &&
-  ["hi", "hello", "hey", "menu", "start"].includes(
-    text.toLowerCase()
-  )
-) {
-  await sendMainMenu(phone);
-}
-if (actionId === "services") {
-  await sendServicesMenu(phone);
-}
+    if (messageCount > 0) {
+      console.log(
+        `${messageCount} message${messageCount === 1 ? "" : "s"} saved!`
+      );
     }
 
     res.sendStatus(200);
