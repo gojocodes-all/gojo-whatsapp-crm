@@ -1,5 +1,36 @@
 # Maintenance log
 
+## 2026-10-09 — Complete webhook batch processing
+
+### Rationale
+
+Meta webhook deliveries can contain multiple entries, changes, and messages, but the route read only the first message from the first change in the first entry. Later customer messages in the same valid delivery were silently dropped, so they were neither stored nor handled by the menu flow.
+
+### Files changed
+
+- `services/webhookProcessor.js` — extracts and processes every valid incoming message sequentially, associates contacts by WhatsApp ID, and ignores non-message events.
+- `routes/webhook.js` — delegates webhook work to the testable processor and reports the processed count.
+- `test/webhookProcessor.test.js` — covers multi-entry batches, contact matching, persistence and menu order, malformed messages, and status-only payloads.
+- `package.json` — includes the new processor and test file in syntax validation.
+- `README.md` — documents complete batch handling and the new module boundary.
+- `.github/maintenance-log.md` — records this maintenance work.
+
+### Validation
+
+- `npm ci`
+- `npm run validate`
+- `npm ci && npm run lint && npm run build` in `frontend/`
+- `git diff --check`
+- Complete diff review for delivery order, error handling, security, backward compatibility, and repository conventions.
+
+### Risk
+
+Low. Single-message deliveries retain their storage, conversation, and menu behavior. Batched deliveries now process later valid messages sequentially; status-only payloads remain acknowledged without side effects. No dependency, schema, configuration, or frontend behavior changes.
+
+### Rollback
+
+Revert this pull request to restore first-message-only webhook processing and remove the focused processor tests.
+
 ## 2026-09-30 — Outgoing message input validation
 
 ### Rationale
