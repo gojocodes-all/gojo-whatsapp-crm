@@ -1,5 +1,33 @@
 # Maintenance log
 
+## 2026-10-13 — Restore chronological chat display
+
+### Rationale
+
+The messages API intentionally returns newest records first so the conversation list can show the latest activity, but the dashboard passed that same order directly to the chat window. Selected conversations therefore rendered newest-to-oldest, placing the oldest message at the bottom where users expect the latest reply.
+
+### Files changed
+
+- `frontend/src/utils/messages.js` — centralizes latest-message conversation summaries and non-mutating oldest-first chat ordering.
+- `frontend/src/pages/Dashboard.jsx` — uses the shared ordering helpers for the sidebar and selected conversation.
+- `test/messageView.test.js` — covers latest-summary selection, chronological display, filtering, and preservation of the API result order.
+- `package.json` — includes the helper and regression test in syntax validation.
+- `.github/maintenance-log.md` — records this maintenance work.
+
+### Validation
+
+- `npm run validate`
+- `npm ci && npm run lint && npm run build` in `frontend/`
+- Complete diff review for message ordering, input immutability, security, backward compatibility, and repository conventions.
+
+### Risk
+
+Low. The API response, database query, polling interval, selected conversation, and sidebar's newest-first behavior are unchanged. Only the selected conversation's display order changes to oldest-first.
+
+### Rollback
+
+Revert this pull request to restore direct newest-first rendering in the chat window.
+
 ## 2026-10-09 — Complete webhook batch processing
 
 ### Rationale

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import Sidebar from "../components/Sidebar";
 import ChatWindow from "../components/ChatWindow";
+import { latestMessagePerChat, messagesForChat } from "../utils/messages";
 
 function Dashboard() {
   const [messages, setMessages] = useState([]);
@@ -27,19 +28,8 @@ function Dashboard() {
   return () => clearInterval(interval);
 }, [selected]);
 
-  const chats = [];
-  const seen = new Set();
-
-  messages.forEach((msg) => {
-    if (!seen.has(msg.from)) {
-      seen.add(msg.from);
-      chats.push(msg);
-    }
-  });
-
-  const currentMessages = messages.filter(
-    (msg) => msg.from === selected
-  );
+  const chats = latestMessagePerChat(messages);
+  const currentMessages = messagesForChat(messages, selected);
 
   return (
     <div
