@@ -1,5 +1,5 @@
 const express = require("express");
-const axios = require("axios");
+const whatsappClient = require("../services/whatsappClient");
 
 const router = express.Router();
 
@@ -18,22 +18,7 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    const response = await axios.post(
-      `https://graph.facebook.com/v23.0/${process.env.PHONE_NUMBER_ID}/messages`,
-      {
-        messaging_product: "whatsapp",
-        to: to,
-        text: {
-          body: message,
-        },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await whatsappClient.sendText(to, message);
 
     res.json(response.data);
   } catch (err) {

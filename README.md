@@ -7,6 +7,7 @@ A small WhatsApp Business CRM prototype for receiving webhook messages, storing 
 - An Express API that connects to MongoDB before accepting requests
 - A testable application module that can be validated without a database connection
 - Meta WhatsApp webhook verification and inbound message handling
+- A shared, testable WhatsApp Cloud API client for text and interactive messages
 - Storage for messages and per-phone conversation state
 - Text-message sending through the WhatsApp Cloud API
 - A basic automated main menu and services menu
@@ -95,7 +96,7 @@ config/              MongoDB connection
 controllers/         WhatsApp Cloud API helpers and bot menus
 models/              Mongoose message and conversation models
 routes/              Webhook, message-list, and send endpoints
-services/            Testable webhook batch processing
+services/            Webhook processing and shared WhatsApp API transport
 frontend/            React and Vite dashboard
 app.js               Express middleware, routes, and status endpoint
 server.js            Database connection and process startup

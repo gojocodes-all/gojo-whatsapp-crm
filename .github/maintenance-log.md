@@ -1,5 +1,38 @@
 # Maintenance log
 
+## 2026-10-17 — Centralize WhatsApp API transport
+
+### Rationale
+
+The dashboard send route and bot controller independently constructed WhatsApp Graph API URLs, authorization headers, API-version paths, and message envelopes. That duplication made API upgrades and credential handling drift-prone, while direct Axios calls prevented focused transport tests.
+
+### Files changed
+
+- `services/whatsappClient.js` — adds one dependency-injectable transport for text and interactive messages, with send-time environment validation.
+- `controllers/botController.js` — routes bot menus and text responses through the shared client while preserving the existing payloads.
+- `routes/send.js` — delegates dashboard text delivery to the shared client.
+- `test/whatsappClient.test.js` — covers endpoint construction, authorization, text and interactive envelopes, missing configuration, and late-loaded environment values.
+- `test/botController.test.js` — protects the existing menu content and controller-to-client delegation.
+- `package.json` — includes the client and its tests in syntax validation.
+- `README.md` — documents the shared transport boundary.
+- `.github/maintenance-log.md` — records this maintenance work.
+
+### Validation
+
+- `npm run validate`
+- `npm run lint` in `frontend/`
+- `npm run build` in `frontend/`
+- `git diff --check`
+- Complete diff review for payload parity, credential handling, security, backward compatibility, and repository conventions.
+
+### Risk
+
+Low. Route paths, accepted inputs, bot menu content, Graph API version, response handling, dependencies, schemas, and frontend behavior are unchanged. Valid sends use the same request shape. Missing or blank WhatsApp credentials now fail locally before an invalid network request is attempted.
+
+### Rollback
+
+Revert this pull request to restore the separate Axios calls in the send route and bot controller and remove the focused client tests.
+
 ## 2026-10-13 — Restore chronological chat display
 
 ### Rationale
