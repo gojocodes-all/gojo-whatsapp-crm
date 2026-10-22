@@ -11,3 +11,13 @@ export function latestMessagePerChat(messages) {
 export function messagesForChat(messages, phone) {
   return messages.filter((message) => message.from === phone).reverse();
 }
+
+export function canSendMessage({ selected, text, sending }) {
+  return (
+    typeof selected === "string" &&
+    selected.trim() !== "" &&
+    typeof text === "string" &&
+    text.trim() !== "" &&
+    !sending
+  );
+}
