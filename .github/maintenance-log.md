@@ -1,5 +1,35 @@
 # Maintenance log
 
+## 2026-10-22 — Accessible chat controls
+
+### Rationale
+
+The dashboard rendered conversations as clickable `div` elements and the reply composer as an unlabeled input plus a click-only button. Keyboard users could not select a conversation, Enter did not submit a reply, and the controls allowed repeated clicks while a send request was in flight. Send failures also appeared in a blocking browser alert instead of an accessible inline status.
+
+### Files changed
+
+- `frontend/src/components/Sidebar.jsx` — uses native conversation buttons with selected state, keyboard access, a readable fallback name, and an empty-list status.
+- `frontend/src/components/ChatWindow.jsx` — uses a labeled reply form, supports Enter submission, prevents empty or duplicate sends, disables unavailable controls, trims outgoing text, and reports failures inline.
+- `frontend/src/utils/messages.js` — centralizes the reply availability rule.
+- `frontend/src/index.css` — adds visually hidden label support and visible keyboard focus styles.
+- `test/messageView.test.js` — covers valid, empty, unselected, and in-flight reply states.
+- `.github/maintenance-log.md` — records this maintenance work.
+
+### Validation
+
+- `npm run validate`
+- `npm run lint` in `frontend/`
+- `npm run build` in `frontend/`
+- Complete diff review for keyboard behavior, form semantics, duplicate-send prevention, security, backward compatibility, and repository conventions.
+
+### Risk
+
+Low. API routes, payload shape, polling, message ordering, dependencies, and stored data are unchanged. Valid replies still use the existing endpoint; the composer now trims surrounding whitespace and temporarily blocks repeat submissions while a request is active.
+
+### Rollback
+
+Revert this pull request to restore the previous click-only conversation rows and reply controls.
+
 ## 2026-10-17 — Centralize WhatsApp API transport
 
 ### Rationale

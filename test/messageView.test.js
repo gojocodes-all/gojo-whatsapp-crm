@@ -35,3 +35,24 @@ test("renders a selected conversation oldest-first without mutating API results"
     originalOrder
   );
 });
+
+test("only enables replies with a conversation, content, and no active send", async () => {
+  const { canSendMessage } = await messagesModule;
+
+  assert.equal(
+    canSendMessage({ selected: "2348012345678", text: " Hello ", sending: false }),
+    true
+  );
+  assert.equal(
+    canSendMessage({ selected: "", text: "Hello", sending: false }),
+    false
+  );
+  assert.equal(
+    canSendMessage({ selected: "2348012345678", text: "   ", sending: false }),
+    false
+  );
+  assert.equal(
+    canSendMessage({ selected: "2348012345678", text: "Hello", sending: true }),
+    false
+  );
+});
