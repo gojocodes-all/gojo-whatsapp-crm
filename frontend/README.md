@@ -12,6 +12,8 @@ npm run dev
 - `npm run build` creates the production bundle in `dist/`.
 - `npm run lint` runs ESLint across the frontend.
 - `npm run preview` serves the production bundle locally.
+- `npm run audit` checks all installed dependencies against the npm advisory database.
+- `npm run validate` runs the dependency audit, lint, and production build.
 
 ## API configuration
 

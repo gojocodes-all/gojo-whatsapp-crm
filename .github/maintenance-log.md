@@ -1,5 +1,35 @@
 # Maintenance log
 
+## 2026-10-29 — Secure dependency baseline and audit gate
+
+### Rationale
+
+The committed backend and frontend lockfiles resolved packages with known vulnerabilities, including a critical `proxy-addr` issue and high-severity advisories in Axios, `body-parser`, `follow-redirects`, React Router, and development tooling. CI installed those exact versions but did not audit either dependency tree, so newly disclosed advisories could pass unnoticed.
+
+### Files changed
+
+- `package.json` and `package-lock.json` — update Axios and Mongoose within their existing major lines, refresh the vulnerable Express and HTTP-client transitive packages, and include a complete dependency audit in backend validation.
+- `frontend/package.json` and `frontend/package-lock.json` — update the frontend's existing Axios, React Router, and Vite major lines, refresh patched transitive packages, and add one complete frontend validation command.
+- `.github/workflows/ci.yml` — run the frontend validation command so both dependency trees are audited on pull requests and changes to `main`.
+- `README.md` and `frontend/README.md` — document the audit and validation commands.
+- `.github/maintenance-log.md` — record this maintenance work.
+
+### Validation
+
+- `npm ci`
+- `npm run validate`
+- `npm ci && npm run validate` in `frontend/`
+- `git diff --check`
+- Complete dependency-tree and diff review for major-version stability, security, runtime compatibility, lockfile integrity, repository conventions, and backward compatibility.
+
+### Risk
+
+Low. All direct dependencies remain on their existing major versions, application source and public APIs are unchanged, and both clean installs pass the repository's tests, lint, build, and dependency audits. The audit gate can intentionally fail future CI runs when npm publishes a new advisory affecting an installed package.
+
+### Rollback
+
+Revert this pull request to restore the previous dependency resolutions and CI commands. Do not roll back without separately addressing the restored advisories.
+
 ## 2026-10-22 — Accessible chat controls
 
 ### Rationale
