@@ -111,7 +111,8 @@ From the repository root:
 - `npm start` — start the API with Node.js
 - `npm run check` — syntax-check backend source and tests
 - `npm test` — run backend tests without MongoDB or Meta credentials
-- `npm run validate` — run all backend checks and tests
+- `npm run audit` — check backend dependencies against the npm advisory database
+- `npm run validate` — run backend checks, tests, and the dependency audit
 
 From `frontend/`:
 
@@ -119,9 +120,11 @@ From `frontend/`:
 - `npm run build` — create a production frontend build
 - `npm run lint` — lint frontend JavaScript and JSX
 - `npm run preview` — preview the production build locally
+- `npm run audit` — check frontend dependencies against the npm advisory database
+- `npm run validate` — run the frontend audit, lint, and production build
 
-Pull requests and changes to `main` run the backend validation plus the frontend lint and production build in GitHub Actions.
+Pull requests and changes to `main` run both validation commands in GitHub Actions, including complete backend and frontend dependency audits.
 
 ## Contributing
 
-Keep changes focused and avoid committing `.env`, access tokens, customer messages, or phone numbers. Run `npm run validate` for backend changes. For frontend changes, run `npm run lint` and `npm run build` inside `frontend/`. Changes that depend on MongoDB, Meta credentials, or live webhook delivery still require manual verification against non-production services. Describe any environment or webhook changes in the pull request.
+Keep changes focused and avoid committing `.env`, access tokens, customer messages, or phone numbers. Run `npm run validate` for backend changes and again inside `frontend/` for frontend changes. Changes that depend on MongoDB, Meta credentials, or live webhook delivery still require manual verification against non-production services. Describe any environment or webhook changes in the pull request.

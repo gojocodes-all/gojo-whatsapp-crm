@@ -41,10 +41,6 @@ jobs:
         run: npm ci
         working-directory: frontend
 
-      - name: Lint frontend
-        run: npm run lint
-        working-directory: frontend
-
-      - name: Build frontend
-        run: npm run build
+      - name: Validate frontend
+        run: npm run validate
         working-directory: frontend
