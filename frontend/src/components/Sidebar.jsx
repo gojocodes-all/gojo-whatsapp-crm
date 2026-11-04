@@ -1,13 +1,6 @@
 function Sidebar({ chats, selected, setSelected }) {
   return (
-    <nav
-      aria-label="Conversations"
-      style={{
-        width: "30%",
-        borderRight: "1px solid #ddd",
-        overflowY: "auto",
-      }}
-    >
+    <nav aria-label="Conversations" className="conversation-sidebar">
       {chats.length === 0 && (
         <p
           role="status"

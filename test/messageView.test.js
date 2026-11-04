@@ -1,4 +1,6 @@
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const test = require("node:test");
 
 const messagesModule = import("../frontend/src/utils/messages.js");
@@ -55,4 +57,43 @@ test("only enables replies with a conversation, content, and no active send", as
     canSendMessage({ selected: "2348012345678", text: "Hello", sending: true }),
     false
   );
+});
+
+test("keeps the dashboard usable at narrow viewport widths", () => {
+  const root = path.resolve(__dirname, "..");
+  const dashboard = fs.readFileSync(
+    path.join(root, "frontend/src/pages/Dashboard.jsx"),
+    "utf8"
+  );
+  const sidebar = fs.readFileSync(
+    path.join(root, "frontend/src/components/Sidebar.jsx"),
+    "utf8"
+  );
+  const chatWindow = fs.readFileSync(
+    path.join(root, "frontend/src/components/ChatWindow.jsx"),
+    "utf8"
+  );
+  const styles = fs.readFileSync(
+    path.join(root, "frontend/src/index.css"),
+    "utf8"
+  );
+  const html = fs.readFileSync(
+    path.join(root, "frontend/index.html"),
+    "utf8"
+  );
+
+  assert.match(dashboard, /<main className="dashboard-shell">/);
+  assert.match(sidebar, /className="conversation-sidebar"/);
+  assert.match(chatWindow, /className="chat-window"/);
+  assert.match(styles, /@media \(max-width: 700px\)/);
+  assert.match(styles, /\.dashboard-shell\s*{\s*flex-direction: column;/);
+  assert.match(
+    styles,
+    /\.conversation-sidebar\s*{[^}]*width: 100%;[^}]*max-height: 38%;/s
+  );
+  assert.match(
+    styles,
+    /\.chat-window\s*{[^}]*width: 100%;[^}]*min-height: 0;/s
+  );
+  assert.match(html, /<title>GOJO WhatsApp CRM<\/title>/);
 });
