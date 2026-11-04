@@ -35,13 +35,7 @@ function ChatWindow({ messages, selected }) {
   return (
     <section
       aria-label={selected ? `Conversation with ${selected}` : "Conversation"}
-      style={{
-        flex: 1,
-        padding: "20px",
-        overflowY: "auto",
-        display: "flex",
-        flexDirection: "column",
-      }}
+      className="chat-window"
     >
       <div>
         {!selected && (

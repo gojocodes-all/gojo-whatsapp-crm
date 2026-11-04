@@ -9,46 +9,38 @@ function Dashboard() {
   const [selected, setSelected] = useState("");
 
   useEffect(() => {
-  const fetchMessages = () => {
-    api.get("/messages")
-      .then((res) => {
-        setMessages(res.data);
+    const fetchMessages = () => {
+      api.get("/messages")
+        .then((res) => {
+          setMessages(res.data);
 
-        if (!selected && res.data.length > 0) {
-          setSelected(res.data[0].from);
-        }
-      })
-      .catch(console.error);
-  };
+          if (!selected && res.data.length > 0) {
+            setSelected(res.data[0].from);
+          }
+        })
+        .catch(console.error);
+    };
 
-  fetchMessages();
+    fetchMessages();
 
-  const interval = setInterval(fetchMessages, 3000);
+    const interval = setInterval(fetchMessages, 3000);
 
-  return () => clearInterval(interval);
-}, [selected]);
+    return () => clearInterval(interval);
+  }, [selected]);
 
   const chats = latestMessagePerChat(messages);
   const currentMessages = messagesForChat(messages, selected);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-background: "#111b21"
-      }}
-    >
+    <main className="dashboard-shell">
       <Sidebar
         chats={chats}
         selected={selected}
         setSelected={setSelected}
       />
 
-      <ChatWindow messages={currentMessages}
-                  selected={selected}
- />
-    </div>
+      <ChatWindow messages={currentMessages} selected={selected} />
+    </main>
   );
 }
 

@@ -1,5 +1,51 @@
 # Maintenance log
 
+## 2026-11-04 — Keep the conversation workspace usable on mobile
+
+### Rationale
+
+The dashboard forced its conversation rail and active chat into a fixed
+side-by-side layout at every viewport width. On phones, the 30% rail squeezed
+conversation labels while the remaining space compressed the reply composer.
+The browser tab also retained the generic Vite title, “frontend.”
+
+### Files changed
+
+- `frontend/src/pages/Dashboard.jsx`, `frontend/src/components/Sidebar.jsx`,
+  and `frontend/src/components/ChatWindow.jsx` — give the existing dashboard
+  regions stable semantic class names and use `main` for the workspace shell.
+- `frontend/src/index.css` — preserve the desktop split view, use the dynamic
+  viewport height where supported, and stack the bounded conversation rail
+  above the active chat at narrow widths.
+- `frontend/index.html` — identify the browser tab as GOJO WhatsApp CRM.
+- `test/messageView.test.js` — protect the responsive shell, mobile stacking,
+  bounded rail, usable chat region, and product title.
+- `.github/maintenance-log.md` — record the maintenance decision.
+
+### Validation
+
+- Root syntax checks and all 18 Node tests pass. The full `npm run validate`
+  reaches `npm audit`, which currently reports the upstream `minimatch`
+  advisory GHSA-g3hv-75wg-m249 through the existing `nodemon` toolchain.
+- Frontend lint and production build pass. The frontend `npm run validate`
+  currently stops at the same upstream advisory through the existing ESLint
+  toolchain before running those two commands.
+- `git diff --check`
+- Complete diff review for desktop parity, mobile scrolling, keyboard focus,
+  semantic structure, accessibility, security, privacy, and backward
+  compatibility.
+
+### Risk
+
+Low. Message loading, selection, ordering, reply submission, API routes,
+dependencies, data formats, and WhatsApp-like colors remain unchanged. The
+layout only switches from side-by-side to stacked below 700 pixels.
+
+### Rollback
+
+Revert this pull request to restore the fixed side-by-side layout and generic
+browser title.
+
 ## 2026-10-29 — Secure dependency baseline and audit gate
 
 ### Rationale
