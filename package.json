@@ -1,26 +1,22 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "WhatsApp Business CRM prototype backend",
-  "main": "server.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
-    "check": "node --check app.js && node --check server.js && node --check config/db.js && node --check controllers/botController.js && node --check models/Conversation.js && node --check models/Message.js && node --check routes/messages.js && node --check routes/send.js && node --check routes/webhook.js && node --check services/webhookProcessor.js && node --check services/whatsappClient.js && node --check frontend/src/utils/messages.js && node --check test/app.test.js && node --check test/botController.test.js && node --check test/messageView.test.js && node --check test/webhookProcessor.test.js && node --check test/whatsappClient.test.js",
-    "test": "node --test",
-    "audit": "npm audit",
-    "validate": "npm run check && npm test && npm run audit"
-  },
+  "dev": "nodemon server.js",
+  "start": "node server.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "axios": "^1.20.0",
+    "axios": "^1.18.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.7.2"
+    "mongoose": "^9.7.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
