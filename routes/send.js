@@ -1,24 +1,28 @@
 const express = require("express");
-const whatsappClient = require("../services/whatsappClient");
+const axios = require("axios");
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { to, message } = req.body || {};
-
-  if (
-    typeof to !== "string" ||
-    !to.trim() ||
-    typeof message !== "string" ||
-    !message.trim()
-  ) {
-    return res.status(400).json({
-      error: '"to" and "message" must be non-empty strings.',
-    });
-  }
+  const { to, message } = req.body;
 
   try {
-    const response = await whatsappClient.sendText(to, message);
+    const response = await axios.post(
+      `https://graph.facebook.com/v23.0/${process.env.PHONE_NUMBER_ID}/messages`,
+      {
+        messaging_product: "whatsapp",
+        to: to,
+        text: {
+          body: message,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     res.json(response.data);
   } catch (err) {
